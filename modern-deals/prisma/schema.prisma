@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  ANALYST
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EventType {
+  VIEW_PRODUCT
+  CLICK_PRODUCT
+  OUTBOUND_CLICK
+  PURCHASE_IMPORTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Niche {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  status      String      @default("active")
+  categories  Category[]
+  products    Product[]
+  createdAt   DateTime    @default(now())
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String
+  nicheId   String
+  niche     Niche     @relation(fields: [nicheId], references: [id], onDelete: Cascade)
+  products  Product[]
+
+  @@unique([slug, nicheId])
+}
+
+model Product {
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  imageUrl      String
+  affiliateUrl  String
+  nicheId       String
+  categoryId    String
+  tags          String
+  status        ProductStatus @default(DRAFT)
+  isFeatured    Boolean       @default(false)
+  createdBy     String?
+  updatedBy     String?
+  publishedAt   DateTime?
+  archivedAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  niche         Niche         @relation(fields: [nicheId], references: [id], onDelete: Cascade)
+  category      Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  events        AnalyticsEvent[]
+}
+
+model AnalyticsEvent {
+  id         String    @id @default(cuid())
+  eventType  EventType
+  productId  String?
+  nicheId    String?
+  sessionId  String
+  source     String?
+  device     String?
+  country    String?
+  createdAt  DateTime  @default(now())
+  product    Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  action     String
+  entityType String
+  entityId   String
+  details    String?
+  createdAt  DateTime @default(now())
+}
