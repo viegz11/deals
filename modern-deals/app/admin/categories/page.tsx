@@ -6,7 +6,13 @@ export default async function CategoriesAdminPage() {
     <div className="card">
       <h2>Categories</h2>
       <p>POST /api/categories to create.</p>
-      <ul>{categories.map((c) => <li key={c.id}>{c.name} ({c.slug}) - {c.niche.name}</li>)}</ul>
+      <ul>
+        {categories.map((c: { id: string; name: string; slug: string; niche: { name: string } }) => (
+          <li key={c.id}>
+            {c.name} ({c.slug}) - {c.niche.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

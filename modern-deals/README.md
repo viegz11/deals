@@ -41,3 +41,15 @@ npm run dev
 - `POST /api/bulk`
 - `GET /api/export`
 - `POST /api/csv-import`
+
+## Deploy on Vercel
+
+1. Import this repo in Vercel and set **Root Directory** to `modern-deals`.
+2. Add environment variables:
+   - `DATABASE_URL`
+   - `NEXTAUTH_URL` (your deployed URL)
+   - `NEXTAUTH_SECRET`
+3. Use this build command so Prisma client is generated in CI:
+   - `npx prisma generate && npm run build`
+4. If you are using Postgres in production, run migrations:
+   - `npx prisma migrate deploy`

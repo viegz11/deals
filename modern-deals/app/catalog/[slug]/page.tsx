@@ -25,7 +25,7 @@ export default async function CatalogPage({ params, searchParams }: { params: { 
         </form>
       </div>
       <div className="grid">
-        {products.map((p) => (
+        {products.map((p: { id: string; title: string; category: { name: string } }) => (
           <Link href={`/product/${p.id}`} className="card" key={p.id}>
             <h3>{p.title}</h3>
             <p>{p.category.name}</p>

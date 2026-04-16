@@ -29,13 +29,19 @@ export default async function DashboardPage() {
       </div>
       <div className="card">
         <h3>Top Products</h3>
-        <ul>{topProducts.map((p) => <li key={p.id}>{p.title} ({p._count.events} events)</li>)}</ul>
+        <ul>
+          {topProducts.map((p: { id: string; title: string; _count: { events: number } }) => (
+            <li key={p.id}>
+              {p.title} ({p._count.events} events)
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="card">
         <h3>Niche Performance</h3>
         <ul>
-          {nichePerf.map((n) => {
-            const total = n.products.reduce((acc, p) => acc + p._count.events, 0);
+          {nichePerf.map((n: { id: string; name: string; products: Array<{ _count: { events: number } }> }) => {
+            const total = n.products.reduce((acc: number, p: { _count: { events: number } }) => acc + p._count.events, 0);
             return <li key={n.id}>{n.name}: {total} events</li>;
           })}
         </ul>

@@ -13,7 +13,7 @@ export default async function ListingsPage() {
       <table>
         <thead><tr><th>Title</th><th>Niche</th><th>Category</th><th>Status</th><th>Link</th></tr></thead>
         <tbody>
-          {products.map((p) => (
+          {products.map((p: { id: string; title: string; niche: { name: string }; category: { name: string }; status: string; affiliateUrl: string }) => (
             <tr key={p.id}>
               <td>{p.title}</td><td>{p.niche.name}</td><td>{p.category.name}</td><td>{p.status}</td><td><a href={p.affiliateUrl}>open</a></td>
             </tr>

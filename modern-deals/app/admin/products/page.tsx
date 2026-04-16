@@ -11,9 +11,15 @@ export default async function ProductsAdminPage() {
     <div className="card">
       <h2>Products</h2>
       <p>Create via POST /api/products. Required: title, description, imageUrl, affiliateUrl, nicheId, categoryId.</p>
-      <p>Niches: {niches.map((n) => n.name).join(', ')}</p>
-      <p>Categories: {categories.map((c) => c.name).join(', ')}</p>
-      <ul>{products.map((p) => <li key={p.id}>{p.title} - {p.status} - {p.niche.name}/{p.category.name}</li>)}</ul>
+      <p>Niches: {niches.map((n: { name: string }) => n.name).join(', ')}</p>
+      <p>Categories: {categories.map((c: { name: string }) => c.name).join(', ')}</p>
+      <ul>
+        {products.map((p: { id: string; title: string; status: string; niche: { name: string }; category: { name: string } }) => (
+          <li key={p.id}>
+            {p.title} - {p.status} - {p.niche.name}/{p.category.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
